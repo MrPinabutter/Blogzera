@@ -134,7 +134,7 @@ export default function Post({ post, preview, nextPost, prevPost }: PostProps) {
           <div className={styles.divisor} />
           
           <nav className={styles.navigatePosts}>
-            {nextPost.data && (
+            {nextPost?.data ? (
               <div>
                 <span>
                   {nextPost.data.title}
@@ -143,9 +143,11 @@ export default function Post({ post, preview, nextPost, prevPost }: PostProps) {
                   <a>Próximo post</a>
                 </Link>
               </div>
-            )}
+            ):
+            <div />
+            }
 
-            {prevPost.data && (
+            {prevPost?.data && (
               <div>
                 <span>
                   {prevPost.data.title}
@@ -212,14 +214,14 @@ export const getStaticProps: GetStaticProps = async ({preview=false, previewData
       orderings: '[document.last_publication_date desc]',
       pageSize: 1, 
       after: `${response.id}`, 
-    }))
+    }));
 
   const nextPost = (await prismic.query(
     Prismic.predicates.at('document.type', 'post'), { 
       pageSize: 1, 
       orderings: '[document.last_publication_date]',
       after: `${response.id}`, 
-    }))
+    }));
 
   nextPost.results
   
@@ -227,8 +229,8 @@ export const getStaticProps: GetStaticProps = async ({preview=false, previewData
     props: {
       post,
       preview,
-      prevPost: prevPost.results[0],
-      nextPost: nextPost.results[0],
+      prevPost: prevPost?.results[0] || null,
+      nextPost: nextPost?.results[0] || null,
     },
     revalidate: 10,
   }
