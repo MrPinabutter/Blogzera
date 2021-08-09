@@ -22,6 +22,15 @@
   }
 }
 
+.infoContainer {
+  small {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--info);
+  }
+}
+
 .info {
   color: var(--info);
   font-size: 0.875rem;
@@ -53,5 +62,40 @@
 
   a {
     color: var(--highlight);
+  }
+}
+
+.divisor {
+  width: 100%;
+  height: 1px;
+  border-bottom: 1px solid var(--divisor);
+  margin-top: 3rem;
+}
+
+.navigatePosts {
+  margin-top: 2rem;
+  display: flex;
+
+  justify-content: space-between;
+
+  div {
+    display: flex;
+    flex-direction: column;
+
+    span {
+      color: var(--heading);
+      font-size: 1.125rem;
+    }
+
+    a {
+      margin-top: 0.5rem;
+      color: var(--highlight);
+      font-size: 0.875rem;
+      font-weight: bold;
+
+      &.right {
+        text-align: right;
+      }
+    }
   }
 }

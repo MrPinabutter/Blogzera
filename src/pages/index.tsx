@@ -29,9 +29,10 @@ interface PostPagination {
 
 interface HomeProps {
   postsPagination: PostPagination;
+  preview?: boolean;
 }
 
-export default function Home({ postsPagination }: HomeProps) {
+export default function Home({ postsPagination, preview }: HomeProps) {
   const [posts, setPosts] = useState(postsPagination.results);
 
   function handleUpdatePosts() {
@@ -111,18 +112,26 @@ export default function Home({ postsPagination }: HomeProps) {
             Carregar mais posts
           </button>
         }
+        {preview && (
+          <aside>
+            <Link href="/api/exit-preview">
+              <a>Sair do modo Preview</a>
+            </Link>
+          </aside>
+        )}
       </main>
     </>
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async ({previewData, preview=false}) => {
   const prismic = getPrismicClient();
   const postsResponse = await prismic.query([
     Prismic.predicates.at('document.type', 'post')
   ], {
     fetch: ['post.title', 'post.subtitle', 'post.last_publication_date', 'post.author'],
     pageSize: 1,
+    ref: previewData?.ref ?? null,
   });
 
   const posts = postsResponse.results.map(post => {
@@ -143,6 +152,7 @@ export const getStaticProps: GetStaticProps = async () => {
       postsPagination: {
         results: posts,
         next_page: postsResponse.next_page,
+        preview
       }
     }
   }
